@@ -43,8 +43,8 @@ pipeline {
         stage('push images'){
             steps{
                 sshagent (credentials: ['jenkins']) {
-                withCredentials([string(credentialsId: 'DOCKER_CREDENTIALS', variable: 'docker_passwd')]){
-                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 echo ${docker_passwd} | docker login -u dalusianyi@gmail.com --password-stdin'
+                withCredentials([string(credentialsId: 'docker_password', variable: 'docker_passwd')]){
+                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker login -u engrsketch -p ${docker_passwd}'
                 sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker push engrsketch/multi-client:v1'
                 sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker push engrsketch/multi-server:v1'
                 sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker push  engrsketch/multi-worker:v1'
