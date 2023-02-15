@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment{
+        //DOCKERHUB_CREDENTIALS = credential('docker_hub')
+    }
     stages {
         stage('Git checkeout') {
             steps {
@@ -41,7 +44,7 @@ pipeline {
             steps{
                 sshagent (credentials: ['jenkins']) {
                 withCredentials([string(credentialsId: 'DOCKER_CREDENTIALS', variable: 'docker_passwd')]){
-                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker login -u dalusianyi@gmail.com -p ${docker_passwd}'
+                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 echo ${docker_passwd} | docker login -u dalusianyi@gmail.com --password-stdin'
                 sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker push engrsketch/multi-client:v1'
                 sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker push engrsketch/multi-server:v1'
                 sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker push  engrsketch/multi-worker:v1'
