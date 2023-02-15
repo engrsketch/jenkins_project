@@ -10,12 +10,12 @@ pipeline {
         stage('Copy to docker and kubeapi server'){
             steps{
                 sshagent (credentials: ['jenkins']) {
-                sh 'scp ./client jenkins@192.168.1.183:/home/jenkins/jenkins_project\
-                    && scp ./worker jenkins@192.168.1.183:/home/jenkins/jenkins_project && \
-                    scp ./server jenkins@192.168.1.183:/home/jenkins/jenkins_project'
+                sh 'scp -r ./client jenkins@192.168.1.183:/home/jenkins/jenkins_project\
+                    && scp -r ./worker jenkins@192.168.1.183:/home/jenkins/jenkins_project && \
+                    scp -r ./server jenkins@192.168.1.183:/home/jenkins/jenkins_project'
             }
             sshagent (credentials: ['ifeanyi']) {
-                sh 'scp ./k8s ifeanyi@192.168.1.195:/home/ifeanyi/jenkins_project'
+                sh 'scp -r ./k8s ifeanyi@192.168.1.195:/home/ifeanyi/jenkins_project'
             }
             }
         }
