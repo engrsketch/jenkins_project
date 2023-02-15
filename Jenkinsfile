@@ -28,7 +28,6 @@ pipeline {
             steps{
                 sshagent (credentials: ['jenkins']) {
                 sh '''
-                ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker image rm engrsketch/multi-client:v1 ngrsketch/multi-server:v1 engrsketch/multi-worker:v1
                 ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker build -t engrsketch/multi-client:v1 /home/jenkins/jenkins_project/client
                 ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker build -t engrsketch/multi-server:v1 /home/jenkins/jenkins_project/server
                 ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker build -t engrsketch/multi-worker:v1 /home/jenkins/jenkins_project/worker
@@ -38,10 +37,15 @@ pipeline {
         }
         stage('push images'){
             steps{
-                withDockerRegistry(credentialsId: 'docker_details', url: 'hub.docker.com') 
-                sh 'docker push engrsketch/multi-client:v1'
-                sh 'docker push engrsketch/multi-server:v1'
-                sh 'docker push  engrsketch/multi-worker:v1'
+                sshagent (credentials: ['jenkins']) {
+                withCredentials([string(credentialsId: 'DOCKER_CREDENTIALS', variable: 'docker_passwd')]){
+                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker docker login -u dalusianyi@gmail.com -p ${docker_passwd}'
+                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker docker push engrsketch/multi-client:v1'
+                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker docker push engrsketch/multi-server:v1'
+                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker docker push  engrsketch/multi-worker:v1'
+                }
+                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker image rm -f engrsketch/multi-client:v1 engrsketch/multi-server:v1 engrsketch/multi-worker:v1'
+                }
             
         }
         }
