@@ -6,6 +6,7 @@ pipeline {
                 // Get some code from a GitHub repository
                 git branch: 'master', credentialsId: 'GIT_CREDENTIAL', url: 'https://github.com/engrsketch/jenkins_project.git'
             }
+        }
         stage('Copy to docker and kubeapi server'){
             steps{
                 sshagent (credentials: ['ifeanyi']) {
