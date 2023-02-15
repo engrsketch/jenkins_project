@@ -21,7 +21,7 @@ pipeline {
         }
         stage('build images'){
             steps{
-                sshagent (credentials: ['ifeanyi']) {
+                sshagent (credentials: ['jenkins']) {
                 sh '''
                 ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 docker build -t engrsketch/multi-client:v1 ./client
                 ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 docker build -t engrsketch/multi-server:v1./server
