@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Copy to docker and kubeapi server'){
             steps{
-                sshagent (credentials: ['ifeanyi']) {
+                sshagent (credentials: ['jenkins']) {
                 sh 'ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 scp /var/lib/jenkins/workspace/first_pipeline/client ifeanyi@192.168.1.183:/home/jenkins/jenkins_project\
                     && scp /var/lib/jenkins/workspace/first_pipeline/worker ifeanyi@192.168.1.183:/home/jenkins/jenkins_project && \
                     scp /var/lib/jenkins/workspace/first_pipeline/server ifeanyi@192.168.1.183:/home/jenkins/jenkins_project'
@@ -23,9 +23,9 @@ pipeline {
             steps{
                 sshagent (credentials: ['jenkins']) {
                 sh '''
-                ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 docker build -t engrsketch/multi-client:v1 ./client
-                ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 docker build -t engrsketch/multi-server:v1./server
-                ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 docker build -t engrsketch/multi-worker:v1 ./worker
+                ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 docker build -t engrsketch/multi-client:v1 /home/jenkins/jenkins_project/client
+                ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 docker build -t engrsketch/multi-server:v1 /home/jenlins/jenkins_project/server
+                ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 docker build -t engrsketch/multi-worker:v1 /home/jenkins/jenkins_project/worker
                 '''
             }
             }
