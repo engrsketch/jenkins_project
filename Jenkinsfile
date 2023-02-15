@@ -54,5 +54,14 @@ pipeline {
             
         }
         }
+        stage('deploy to k8s'){
+            steps{
+                sshagent (credentials: ['ifeanyi']) {
+                sh '''
+                ssh -o StrictHostKeyChecking=no jenkins@192.168.1.195 kubectl apply -f /home/ifeanyi/jenkins_project/k8s
+                '''
+            }
+            }
+        }
         }
         }
