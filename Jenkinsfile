@@ -10,12 +10,12 @@ pipeline {
         stage('Copy to docker and kubeapi server'){
             steps{
                 sshagent (credentials: ['jenkins']) {
-                sh 'scp -r ./client -o StrictHostKeyChecking=no jenkins@192.168.1.183:/home/jenkins/jenkins_project\
-                    && scp -r ./worker -o StrictHostKeyChecking=no jenkins@192.168.1.183:/home/jenkins/jenkins_project && \
-                    scp -r ./server -o StrictHostKeyChecking=no jenkins@192.168.1.183:/home/jenkins/jenkins_project'
+                sh 'scp -o StrictHostKeyChecking=no -r ./client jenkins@192.168.1.183:/home/jenkins/jenkins_project\
+                    && scp -o StrictHostKeyChecking=no -r ./worker jenkins@192.168.1.183:/home/jenkins/jenkins_project && \
+                    scp -o StrictHostKeyChecking=no -r ./server jenkins@192.168.1.183:/home/jenkins/jenkins_project'
             }
             sshagent (credentials: ['ifeanyi']) {
-                sh 'scp -r ./k8s -o StrictHostKeyChecking=no ifeanyi@192.168.1.195:/home/ifeanyi/jenkins_project'
+                sh 'scp -o StrictHostKeyChecking=no -r ./k8s ifeanyi@192.168.1.195:/home/ifeanyi/jenkins_project'
             }
             }
         }
