@@ -19,7 +19,6 @@ pipeline {
             }
             }
         }
-        }
         stage('build images'){
             steps{
                 sshagent (credentials: ['ifeanyi']) {
@@ -38,6 +37,7 @@ pipeline {
                 sh 'docker push engrsketch/multi-server:v1'
                 sh 'docker push  engrsketch/multi-worker:v1'
             
+        }
         }
         }
         }
