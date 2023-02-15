@@ -11,13 +11,16 @@ pipeline {
             steps{
                 sshagent (credentials: ['jenkins']) {
                 // sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 sh /home/jenkins/jenkins_project/remove_dir.sh'
-                sh 'scp -o StrictHostKeyChecking=no -r ./client jenkins@192.168.1.183:/home/jenkins/jenkins_project'
-                sh 'scp -o StrictHostKeyChecking=no -r ./worker jenkins@192.168.1.183:/home/jenkins/jenkins_project'
-                sh 'scp -o StrictHostKeyChecking=no -r ./server jenkins@192.168.1.183:/home/jenkins/jenkins_project'
+                sh '''
+                ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 sh /home/jenkins/jenkins_project/remove_dir.sh
+                scp -o StrictHostKeyChecking=no -r ./client jenkins@192.168.1.183:/home/jenkins/jenkins_project
+                scp -o StrictHostKeyChecking=no -r ./worker jenkins@192.168.1.183:/home/jenkins/jenkins_project
+                scp -o StrictHostKeyChecking=no -r ./server jenkins@192.168.1.183:/home/jenkins/jenkins_project
+                '''
             }
             sshagent (credentials: ['ifeanyi']) {
                 sh '''
-                    ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 sh /home/jenkins/jenkins_project/remove_dir.sh
+                    ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 sh /home/jenkins/jenkins_project/remove_dir.sh
                     scp -o StrictHostKeyChecking=no -r ./k8s ifeanyi@192.168.1.195:/home/ifeanyi/jenkins_project/
                     '''
             }
