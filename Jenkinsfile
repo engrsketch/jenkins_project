@@ -10,12 +10,17 @@ pipeline {
         stage('Copy to docker and kubeapi server'){
             steps{
                 sshagent (credentials: ['jenkins']) {
-                sh 'scp -o StrictHostKeyChecking=no -r ./client jenkins@192.168.1.183:/home/jenkins/jenkins_project\
-                    && scp -o StrictHostKeyChecking=no -r ./worker jenkins@192.168.1.183:/home/jenkins/jenkins_project && \
-                    scp -o StrictHostKeyChecking=no -r ./server jenkins@192.168.1.183:/home/jenkins/jenkins_project'
+                sh '''
+                    ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 ./home/jenkins/jenkins_project/remove_dir.sh
+                    scp -o StrictHostKeyChecking=no -r ./client jenkins@192.168.1.183:/home/jenkins/jenkins_project
+                    scp -o StrictHostKeyChecking=no -r ./worker jenkins@192.168.1.183:/home/jenkins/jenkins_project
+                    scp -o StrictHostKeyChecking=no -r ./server jenkins@192.168.1.183:/home/jenkins/jenkins_project
+                    '''
             }
             sshagent (credentials: ['ifeanyi']) {
-                sh 'scp -o StrictHostKeyChecking=no -r ./k8s ifeanyi@192.168.1.195:/home/ifeanyi/jenkins_project'
+                sh '
+                    ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 ./home/jenkins/jenkins_project/remove_dir.sh
+                    scp -o StrictHostKeyChecking=no -r ./k8s ifeanyi@192.168.1.195:/home/ifeanyi/jenkins_project/k8s'
             }
             }
         }
@@ -23,6 +28,7 @@ pipeline {
             steps{
                 sshagent (credentials: ['jenkins']) {
                 sh '''
+                ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker image rm engrsketch/multi-client:v1 ngrsketch/multi-server:v1 engrsketch/multi-worker:v1
                 ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker build -t engrsketch/multi-client:v1 /home/jenkins/jenkins_project/client
                 ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker build -t engrsketch/multi-server:v1 /home/jenkins/jenkins_project/server
                 ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 docker build -t engrsketch/multi-worker:v1 /home/jenkins/jenkins_project/worker
