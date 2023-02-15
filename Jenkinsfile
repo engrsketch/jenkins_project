@@ -10,7 +10,7 @@ pipeline {
         stage('Copy to docker and kubeapi server'){
             steps{
                 sshagent (credentials: ['jenkins']) {
-                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 scp /var/lib/jenkins/workspace/first_pipeline/client ifeanyi@192.168.1.183:/home/jenkins/jenkins_project\
+                sh 'ssh -o StrictHostKeyChecking=no jenkins@192.168.1.183 scp /var/lib/jenkins/workspace/first_pipeline/client jenkins@192.168.1.183:/home/jenkins/jenkins_project\
                     && scp /var/lib/jenkins/workspace/first_pipeline/worker ifeanyi@192.168.1.183:/home/jenkins/jenkins_project && \
                     scp /var/lib/jenkins/workspace/first_pipeline/server ifeanyi@192.168.1.183:/home/jenkins/jenkins_project'
             }
