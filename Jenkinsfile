@@ -20,7 +20,7 @@ pipeline {
             }
             sshagent (credentials: ['ifeanyi']) {
                 sh '''
-                    ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 sh /home/jenkins/jenkins_project/remove_dir.sh
+                    ssh -o StrictHostKeyChecking=no ifeanyi@192.168.1.183 sh /home/ifeanyi/jenkins_project/remove_dir.sh
                     scp -o StrictHostKeyChecking=no -r ./k8s ifeanyi@192.168.1.195:/home/ifeanyi/jenkins_project/
                     '''
             }
