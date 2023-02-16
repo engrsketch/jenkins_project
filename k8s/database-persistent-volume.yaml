@@ -6,6 +6,6 @@ spec:
   capacity:
     storage: 200Mi
   volumeMode: Filesystem
-  #accessModes:
-    #- ReadWriteOnce
-  #persistentVolumeReclaimPolicy: Recycle
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
